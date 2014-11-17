@@ -8,15 +8,19 @@ router.get("/", function(req, res) {
 
 	/* Request to Wunderground API for nearest weather stations to current location */
 	request("http://api.wunderground.com/api/b72f7eac14a73b00/geolookup/q/autoip.json", function(error, response, body) {
+		
 		if (!error && response.statusCode == 200) {
 			var cities = JSON.parse(body).location.nearby_weather_stations.airport.station;
 			var nearestCities = [];
+
 			// Push your current city to nearestCities
 			nearestCities.push({"name": JSON.parse(body).location.state + "/" + JSON.parse(body).location.city});
+
 			// Push the three closest cities to nearestCities
 			for (var i = 0; i < 3; i++) {
 				nearestCities.push({"name": cities[i].state + "/" + cities[i].city});
 			}
+
 			// Used in async.map to extract relavent information from JSON returned by the API
 			var getInfo = function(city, doneCallback) {
 				request("http://api.wunderground.com/api/b72f7eac14a73b00/conditions/q/" + city.name + ".json",
@@ -24,8 +28,14 @@ router.get("/", function(req, res) {
 							if (!error && response.statusCode == 200) {
 								var parsedBody = JSON.parse(body);
 								var name = parsedBody.current_observation.display_location.full;
+								
+								// Setting temperature
 								var temp = parsedBody.current_observation.temp_f;
+								
+								// Setting weather
 								var weather = parsedBody.current_observation.weather;
+								
+								// Setting weather icon
 								if (weather == "Clear") {
 									var img = "/images/clear.png";
 								}
@@ -35,19 +45,26 @@ router.get("/", function(req, res) {
 								if (weather == "Cloudy" || weather == "Mostly Cloudy") {
 									var img = "/images/cloudy.png";
 								}
+
+								// Setting precipitation
 								var precip = parseInt(parsedBody.current_observation.precip_today_in);
 								if (precip == 0) {
 									precip = "no";
 								} else {
 									precip = precip + " inches of";
 								}
+
+								// Setting wind
 								var wind = parsedBody.current_observation.wind_mph;
+
+								// Returns the populated object to async.map
 								return doneCallback(null, {"name": name, "temp": temp, "weather": weather, "img": img, "precip": precip, "wind": wind});
 							}	
 						});
 			};
+
 			/* Maps getInfo over each city in nearestCities and renders the html after
-			 all calls to the API have returned */
+			 all requests to the API have returned */
 			async.map(nearestCities, getInfo, function(err, results) {
 				nearestCities = results;
 
