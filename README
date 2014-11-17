@@ -1,0 +1,3 @@
+A simple weather application that pulls data from the Wunderground API to provide current conditions for the 4 nearest weather stations.
+
+To use, call "npm start" in the wundergroundApp directory and the direct to http://localhost:3000/ in your browswer.

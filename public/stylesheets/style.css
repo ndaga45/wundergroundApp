@@ -1,0 +1,25 @@
+body {
+  padding: 50px;
+  font-family: 'Muli';
+}
+
+h1 {
+	text-align: center;
+	font-family: 'Codystar';
+	color: #66E0FF;
+}
+
+table {
+	margin-right: auto;
+	margin-left: auto;
+	table-layout: fixed;
+	width: 800px;
+}
+
+td {
+	text-align: center;
+}
+
+td img {
+	height: 50px;
+}

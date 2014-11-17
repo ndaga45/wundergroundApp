@@ -1,0 +1,45 @@
+extends layout
+
+block content
+	title Weather Near You
+
+	h1 Weather Near You
+
+	table
+		thead
+			th= city0
+			th= city1
+			th= city2
+			th= city3
+		tbody
+			tr
+				td #{temp0} &#176; F
+				td #{temp1} &#176; F
+				td #{temp2} &#176; F
+				td #{temp3} &#176; F
+			tr
+				td= weather0
+				td= weather1
+				td= weather2
+				td= weather3
+			tr
+				td
+					img(src="#{img0}")
+				td
+					img(src="#{img1}")
+				td
+					img(src="#{img2}")
+				td
+					img(src="#{img3}")
+			tr
+				td #{precip0} rain
+				td #{precip1} rain
+				td #{precip2} rain
+				td #{precip3} rain
+			tr
+				td #{wind0} mph wind
+				td #{wind1} mph wind
+				td #{wind2} mph wind
+				td #{wind3} mph wind
+
+
